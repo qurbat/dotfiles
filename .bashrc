@@ -76,15 +76,40 @@ fi
 # colored GCC warnings and errors
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
+
+# iw-magic functions
+# iwman: put a wireless interface in managed
+# iwmon: put a wireless interface in monitor
+iwman() {
+    sudo service NetworkManager restart &&
+    sudo ifconfig "$1" down &&
+    sudo iwconfig "$1" mode managed &&
+    sudo ifconfig "$1" up;
+    }
+
+iwmon() {
+    sudo service NetworkManager stop &&
+    sudo ifconfig "$1" down &&
+    sudo iwconfig "$1" mode monitor &&
+    sudo ifconfig "$1" up;
+    }
+
 # some more ls aliases
 alias lk='ls -l --block-size=K --color=auto'
 alias lm='ls -l --block-size=M --color=auto'
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+# rename open
 alias open='xdg-open'
+# ~ SSH magic! ~ #
+# ~ note: the hosts have a corresponding entry ~ #
+# ~	  for them in the /etc/hosts/ file.  ~ #
 alias bitwarden='ssh -i ~/.ssh/mumbai.pem ubuntu@bitwarden'
+alias azadhind='ssh azad@hind'
+# git oopsie
 alias git-wipe="git checkout --orphan temporary_branch && git add -A && git commit -am 'initial commit' && git branch -D main && git branch -m main && git push -f origin main && git gc --aggressive --prune=all && git push --set-upstream origin main"
+
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
